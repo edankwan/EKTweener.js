@@ -150,6 +150,7 @@ EKTweener = (function() {
     function getTween(target, keyName){
         // get a tween of a target by the keyname
         var arr = getTweens(target);
+        if(!arr) return null;
         var i = arr.length;
         while(i--) if(arr[i].properties[keyName]) return arr[i];
         return null;
