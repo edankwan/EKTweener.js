@@ -2,25 +2,33 @@ function EKTweenerOpacityPlugin () {
     
     var _from;
     var _to;
-    var _target;
+    var _style;
     
-    this.setFrom = function (from) {
-        _from = from === "" ? 1: parseFloat(from);
+    this.setFrom  = function (from) {
+    	var index = from.indexOf("alpha");
+    	if(index>-1){
+    		_from = parseFloat(from.slice(from.indexOf("=", index)+1)) / 100;
+    	}else{
+    		_from = 1;
+    	}
     }
 
-    this.setTo = function (to, target) {
+    this.setTo = function (to) {
         _to = to;
-        if(target) _target = target;
     }
 
-    this.setOutput = (typeof document.body.style.opacity === "undefined") ?
-        function (value) {
-            _target.filter = "alpha(opacity=" + ((_from + (_to - _from) * value) * 100) + ")";
-            return 1;
-        }:
-        function (value) {
-            return _from + (_to - _from) * value;
-        }
-}
+    this.setOutput = function (value) {
+        return "alpha(opacity=" + ((_from + (_to - _from) * value) * 100) + ")";
+    }
+};
+EKTweenerOpacityPlugin.hasOpacity = (function(){
+	var testedElement = document.createElement("div");
+	return "opacity" in testedElement.style;
+})();
 
-if(EKTweener)EKTweener.HTMLPlugins.opacity = EKTweenerOpacityPlugin;
+if(EKTweener){
+	if(!EKTweenerOpacityPlugin.hasOpacity) {
+		EKTweener.HTMLStyleAlias.opacity = "filter";
+		EKTweener.HTMLPlugins.opacity = EKTweenerOpacityPlugin;
+	}
+}

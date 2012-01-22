@@ -1,12 +1,12 @@
 /**
 *
-* Version: 	0.2a
+* Version: 	0.3
 * Author:	Edan Kwan
 * Contact: 	info@edankwan.com
 * Website:	http://www.edankwan.com/
 * Twitter:	@edankwan
 *
-* Copyright (c) 2011 Edan Kwan
+* Copyright (c) 2012 Edan Kwan
 * 
 * Permission is hereby granted, free of charge, to any person
 * obtaining a copy of this software and associated documentation
@@ -49,11 +49,37 @@ if(!window.requestAnimFrame){
     })(window);
 }
 
+/*
+ * getComputedStyle for IE:
+ * http://snipplr.com/view/13523/
+ */
+if (!window.getComputedStyle) {
+    window.getComputedStyle = function(el, pseudo) {
+        this.el = el;
+        this.getPropertyValue = function(prop) {
+            var re = /(\-([a-z]){1})/g;
+            if (prop == 'float') prop = 'styleFloat';
+            if (re.test(prop)) {
+                prop = prop.replace(re, function () {
+                    return arguments[2].toUpperCase();
+                });
+            }
+            return el.currentStyle[prop] ? el.currentStyle[prop] : null;
+        }
+        return this;
+    }
+}
+
+
 EKTweener = (function() {
+
+    var app = {};
     
-    var _public = {};
+    var _browserPrefix = "";
     
     var HTMLPlugins = {};
+    var HTMLPrefixedStyle = [];
+    var HTMLStyleAlias = {};
     var HTMLSuffix = {
         width: "px",
         height: "px",
@@ -72,37 +98,90 @@ EKTweener = (function() {
         fontSize: "px",
         size: "px"
     };
-    
+
     var _targetTweens = [];
-    
+
     function _isHTMLElement(target){
         return typeof HTMLElement === "object" ? target instanceof HTMLElement :  typeof target === "object" && target.nodeType === 1 && typeof target.nodeName==="string";
     };
-    
-    function to(target, duration, data) {
-
-        if (_isHTMLElement(target)){
-            
-            // implant the object of the html element to the style just in case any plugin needs it
-            target.style.HTMLElement = target;
-            target = target.style;
-    
-            // automatically apply plugins and suffix values
-            for (var i in HTMLPlugins) {
-                if(!data.plugin) data.plugin = {};
-                if(!data.suffix) data.suffix = {};
-                for(i in data) {
-                    if(HTMLPlugins[i] && !data.plugin[i]) {
-                        data.plugin[i] = HTMLPlugins[i];
-                    }else if(HTMLSuffix[i] && !data.suffix[i]){
-                        data.suffix[i] = HTMLSuffix[i];
-                    }
-                }
+    function _isStyle(target){
+        return typeof CSSStyleDeclaration === "object" ? target instanceof CSSStyleDeclaration :  typeof target === "object" && typeof target.cssText ==="string";
+    };
+	function _init(){
+		var testedElement = document.createElement("div");
+		var browserPrefixes = 'Webkit Moz O ms'.split(' ');
+		var i = browserPrefixes.length;
+    	while(i--){
+    		if(browserPrefixes[i]+"Transform" in testedElement.style) {
+    			_browserPrefix = browserPrefixes[i];
+    			break;
+    		}
+    	}
+	}
+	
+	
+	/*
+	 *  change the style alias into the real style name and then add the browser prefix
+	 */
+	function getPropertyName(name){
+		if(HTMLStyleAlias[name]) name = HTMLStyleAlias[name];
+		for(var i = 0; i<HTMLPrefixedStyle.length;i++) if(HTMLPrefixedStyle[i] === name) return _browserPrefix + name.charAt(0).toUpperCase() + name.slice(1);
+		return name;
+	}
+	
+	
+	function _parseDataNaming(data){
+		
+		for(var name in data){
+			var newName = name;
+			if(HTMLStyleAlias[name]) newName = HTMLStyleAlias[name];
+			for(var i = 0; i<HTMLPrefixedStyle.length;i++) if(HTMLPrefixedStyle[i] === newName) {newName = _browserPrefix + newName.charAt(0).toUpperCase() + newName.slice(1); break};
+			if(name !== newName){
+				data[newName] = data[name];
+				delete data[name];
+			}
+		}
+		for(var name in data.plugin){
+			var newName = name;
+			if(HTMLStyleAlias[name]) newName = HTMLStyleAlias[name];
+			for(var i = 0; i<HTMLPrefixedStyle.length;i++) if(HTMLPrefixedStyle[i] === newName) {newName = _browserPrefix + newName.charAt(0).toUpperCase() + newName.slice(1); break};
+			if(name !== newName){
+				data.plugin[newName] = data.plugin[name];
+				delete data.plugin[name];
+			}
+		}
+	}
+	
+    /*
+     * automatically apply plugins and suffix values
+     */ 
+	function _parseHTMLStyle(target, data){
+		target.computedStyle = window.getComputedStyle(target);
+		if(!data.plugin) data.plugin = {};
+		if(!data.suffix) data.suffix = {};
+        for(property in data) {
+        	if(HTMLPlugins[property] && !data.plugin[property]) {
+                data.plugin[property] = HTMLPlugins[property];
+            }
+            if(HTMLSuffix[property] && !data.suffix[property]){
+                data.suffix[property] = HTMLSuffix[property];
             }
         }
+        _parseDataNaming(data);
+	}
+	
+    function to(target, duration, data) {
+    	var appliedTarget;
+    	if(_isHTMLElement(target)){
+    		appliedTarget = target.style;
+    		_parseHTMLStyle(target, data)
+    	}else{
+    		appliedTarget = target;
+    		data.appliedTarget = target;
+    	}
 
         // implant an array of tweenIds to the target
-        if (typeof target.tweenId == "undefined") {
+        if (typeof target.tweenId === "undefined") {
             target.tweenId = _targetTweens.length;
             _targetTweens[target.tweenId] = [];
         }
@@ -115,17 +194,22 @@ EKTweener = (function() {
         }
         
         // create a EKTween and add the tween to the list
-        var ekTween = new EKTween(target, duration, delay, data);
+        var ekTween = new EKTween(target, appliedTarget, duration, delay, data);
         _targetTweens[target.tweenId].push(ekTween);
+        
         return ekTween;
+        
     };
 
     function fromTo(target, duration, fromData, toData) {
         // create a EKTween and change the from values afterwards
         var ekTween = to(target, duration, toData);
+        if(_isHTMLElement(target))_parseDataNaming(fromData);
         for (var i in fromData) ekTween.changeFrom(i, fromData[i]);
+        
         return ekTween;
     };
+
 
     function killTweensOf(target) {
         // kill all the tweens of the target
@@ -142,43 +226,52 @@ EKTweener = (function() {
     
     function getTweens(target){
         // get an array of tweens
-        var tmp = target
-        if (_isHTMLElement(tmp)) tmp = tmp.style;
-        return _targetTweens[tmp.tweenId];
+        return _targetTweens[target.tweenId];
     };
     
-    function getTween(target, keyName){
-        // get a tween of a target by the keyname
+    function getTween(target, propertyName){
+    	
+    	if(HTMLStyleAlias[propertyName]) propertyName = HTMLStyleAlias[propertyName];
+    	
+        // get a tween of a target by the propertyName
         var arr = getTweens(target);
         if(!arr) return null;
         var i = arr.length;
-        while(i--) if(arr[i].properties[keyName]) return arr[i];
+        while(i--) if(arr[i].properties[propertyName]) return arr[i];
         return null;
     };
     
     
-    _public.HTMLPlugins = HTMLPlugins;
-    _public.HTMLSuffix = HTMLSuffix;
-    _public.to = to;
-    _public.fromTo = fromTo;
-    _public.killTweensOf = killTweensOf;
-    _public.getTweens = getTweens;
-    _public.getTween = getTween;
+    _init();
     
-    return _public;
+    app.HTMLPlugins = HTMLPlugins;
+    app.HTMLSuffix = HTMLSuffix;
+    app.HTMLPrefixedStyle = HTMLPrefixedStyle;
+    app.HTMLStyleAlias = HTMLStyleAlias;
     
-}());
-
+    app.getPropertyName = getPropertyName;
+    app.to = to;
+    app.fromTo = fromTo;
+    app.killTweensOf = killTweensOf;
+    app.getTweens = getTweens;
+    app.getTween = getTween;
+    
+    return app;
+    
+})();
 
 
 /*
  * EKTween Class
  */
 
-function EKTween(target, duration, delay, data){
+function EKTween(target, appliedTarget, duration, delay, data){
     
     this._target = target;
+    this._appliedTarget = appliedTarget;
+    this._isStyle = target !== appliedTarget;
     this._data = data;
+    this._pauseTime = 0;
     this._isPaused = false;
     this._isStarted = false;
     this._currentTime = new Date().getTime();
@@ -217,14 +310,21 @@ EKTween.prototype = {
                 case "ease":
                     this.ease = EKTweenFunc[this._data[i]];
                     break;
-                case "prefix": case "suffix": case "onStart": case "onStartParams": case "onUpdate": case "onUpdateParams": case "onComplete": case "onCompleteParams":
+                case "prefix":
+                case "suffix":
+                case "onStart":
+                case "onStartParams":
+                case "onUpdate":
+                case "onUpdateParams":
+                case "onComplete":
+                case "onCompleteParams":
                     this[i] = this._data[i];
                     break;
                 case "plugin":
                     break;
                 default:
-                    this.properties[i] = [this.plugin[i] ? 1 : this._data[i], null, null, null];
-                    if(this.plugin[i])this.plugin[i].setTo(this._data[i], this._target);
+                    this.properties[i] = [this.plugin[i] ? 1 : this._data[i], 0];
+                    if(this.plugin[i])this.plugin[i].setTo(this._data[i], this._appliedTarget);
             }
     
         };
@@ -233,7 +333,6 @@ EKTween.prototype = {
         this.tweens = EKTweener.getTweens(this._target);
         if(this.tweens){
             if(this.tweens.length>0){
-                var keyNames = [];
                 i = this.tweens.length;
                 while(i--){
                     if(this.tweens[i].removeProperties(this.properties)==0){
@@ -244,7 +343,8 @@ EKTween.prototype = {
             };
         };
         
-    
+    	delete this._data;
+    	
         function bind(fn, scope){
             return function(){
                 return fn.apply(scope, Array.prototype.slice.call(arguments));
@@ -318,35 +418,44 @@ EKTween.prototype = {
         
     },
     
-    setProperty: function (keyName, property) {
+    setProperty: function (propertyName, property) {
         var i;
         if (this.prefix) {
-            if (this.prefix[keyName]) {
-                property[2] = this.prefix[keyName];
+            if (this.prefix[propertyName]) {
+                property[2] = this.prefix[propertyName];
             }
         };
         if (this.suffix) {
-            if (this.suffix[keyName]) {
-                property[3] = this.suffix[keyName];
+            if (this.suffix[propertyName]) {
+                property[3] = this.suffix[propertyName];
             }
         };
-        property[1] = this.plugin[keyName] ? 0 : parseFloat(this._target[keyName]);
+        if(this._isStyle) {
+        	var currentValue = this.getCurrentPropertyValue(propertyName);
+        	if(this.plugin[propertyName]) {
+        		this.plugin[propertyName].setFrom(currentValue);
+        		property[1] = 0;
+        	}else{
+        		property[1] = parseFloat(currentValue);
+        	}
+        }else{
+        	property[1] = this._appliedTarget[propertyName];
+        }
         if(isNaN(property[1])) property[1] = 0;
-        if(this.plugin[keyName]) this.plugin[keyName].setFrom(this._target[keyName]);
     },
 
-    setEaseValue: function (keyName, property) {
-        this.setValue(this.ease(this._currentTime - this._startTime < 0 ? 0 : this._currentTime - this._startTime, property[1], property[0] - property[1], this._durationTime), keyName, property);
+    setEaseValue: function (propertyName, property) {
+        this.setValue(this.ease(this._currentTime - this._startTime < 0 ? 0 : this._currentTime - this._startTime, property[1], property[0] - property[1], this._durationTime), propertyName, property);
     },
     
-    setValue: function (value, keyName, property) {
+    setValue: function (value, propertyName, property) {
         if (isNaN(value)) return;
         
-        var pValue = this.plugin[keyName] ? this.plugin[keyName].setOutput(value) : value;
+        var pValue = this.plugin[propertyName] ? this.plugin[propertyName].setOutput(value) : value;
 
-        if (property[2] || property[3])
-            this._target[keyName] = (property[2] ? property[2] : "") + pValue + (property[3] ? property[3] : "");
-        else this._target[keyName] = pValue;
+        if (property.length>2)
+            this._appliedTarget[propertyName] = (property[2] ? property[2] : "") + pValue + (property[3] ? property[3] : "");
+        else this._appliedTarget[propertyName] = pValue;
         
     },
 
@@ -355,43 +464,64 @@ EKTween.prototype = {
     },
     
     pause: function(){
+    	if(this._pauseTime==0) this._pauseTime = new Date().getTime();
         this._isPaused = true;
     },
     resume: function(){
+    	if(this._pauseTime>0) {
+    		var timeDiff = new Date().getTime() - this._pauseTime;
+    		this._currentTime += timeDiff;
+    		this._startTime += timeDiff;
+    		_pauseTime = new Date().getTime();
+    		this._pauseTime = 0;
+    	} 
         if (this._isPaused) this._isPaused = false;
     },
-    removeProperties: function(keyNames){
+    removeProperties: function(propertyNames){
         var i;
-        if(keyNames){
+        if(propertyNames){
             var size = 0;
-            for(i in this.properties){
-                if(i in keyNames) delete this.properties[i]; else size++;
+            for(propertyName in this.properties){
+                if(propertyName in propertyNames) delete this.properties[propertyName]; else size++;
             };
             return size;
         }else{
-            for(i in this.properties)delete this.properties[i];
+            for(propertyName in this.properties)delete this.properties[propertyName];
         }
         return 0;
     },
-    changeFrom: function (keyName, value) {
-        if(!this._isStarted) this.setProperty(keyName, this.properties[keyName]);
-        if (this.properties[keyName]) {
-            if (this.plugin[keyName]) {
-                this.plugin[keyName].setFrom(value);
+    changeFrom: function (propertyName, value) {
+    	if(this._isHTML)propertyName = getPropertyName(propertyName);
+        if(!this._isStarted) this.setProperty(propertyName, this.properties[propertyName]);
+        if (this.properties[propertyName]) {
+            if (this.plugin[propertyName]) {
+                this.plugin[propertyName].setFrom(value);
             } else {
-                this.properties[keyName][1] = value;
+                this.properties[propertyName][1] = value;
             }
         }
-        this.setEaseValue(keyName, this.properties[keyName]);
+        this.setEaseValue(propertyName, this.properties[propertyName]);
     },
-    changeTo: function (keyName, value) {
-        if (this.properties[keyName]) {
-            if (this.plugin[keyName]) {
-                this.plugin[keyName].setTo(value);
+    
+    changeTo: function (propertyName, value) {
+    	if(this._isHTML)propertyName = getPropertyName(propertyName);
+        if (this.properties[propertyName]) {
+            if (this.plugin[propertyName]) {
+                this.plugin[propertyName].setTo(value);
             } else {
-                this.properties[keyName][0] = value;
+                this.properties[propertyName][0] = value;
             }
         }
+    },
+    
+    getCurrentPropertyValue: function(propertyName){
+        var re = /[A-Z]/g;
+        if (re.test(propertyName)) {
+    		propertyName = propertyName.replace(re, function() {return "-" + arguments[0].toLowerCase()});
+    		if(propertyName.indexOf("ms") == 0) propertyName = "-" + propertyName;
+        }
+        
+    	return this._target.computedStyle.getPropertyValue(propertyName);
     }
 };
 
@@ -565,3 +695,9 @@ var EKTweenFunc = {
         return EKTweenFunc.easeInBounce((t*2)-d, b+c/2, c/2, d);
     }
 };
+
+
+
+
+
+
