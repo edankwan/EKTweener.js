@@ -1,6 +1,6 @@
 /**
 *
-* Version: 	0.3
+* Version: 	0.3.1
 * Author:	Edan Kwan
 * Contact: 	info@edankwan.com
 * Website:	http://www.edankwan.com/
@@ -494,7 +494,7 @@ EKTween.prototype = {
     },
     changeFrom: function (propertyName, value) {
     	if(this._isHTML)propertyName = getPropertyName(propertyName);
-        if(!this._isStarted) this.setProperty(propertyName, this.properties[propertyName]);
+        this.setProperty(propertyName, this.properties[propertyName]);
         if (this.properties[propertyName]) {
             if (this.plugin[propertyName]) {
                 this.plugin[propertyName].setFrom(value);
