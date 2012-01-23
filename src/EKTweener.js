@@ -170,7 +170,7 @@ EKTweener = (function() {
         _parseDataNaming(data);
 	}
 	
-    function to(target, duration, data) {
+    function to(target, duration, data, hasFrom) {
     	var appliedTarget;
     	if(_isHTMLElement(target)){
     		appliedTarget = target.style;
@@ -194,7 +194,7 @@ EKTweener = (function() {
         }
         
         // create a EKTween and add the tween to the list
-        var ekTween = new EKTween(target, appliedTarget, duration, delay, data);
+        var ekTween = new EKTween(target, appliedTarget, duration, delay, data, hasFrom || false);
         _targetTweens[target.tweenId].push(ekTween);
         
         return ekTween;
@@ -203,7 +203,7 @@ EKTweener = (function() {
 
     function fromTo(target, duration, fromData, toData) {
         // create a EKTween and change the from values afterwards
-        var ekTween = to(target, duration, toData);
+        var ekTween = to(target, duration, toData, true);
         if(_isHTMLElement(target))_parseDataNaming(fromData);
         for (var i in fromData) ekTween.changeFrom(i, fromData[i]);
         
@@ -265,7 +265,7 @@ EKTweener = (function() {
  * EKTween Class
  */
 
-function EKTween(target, appliedTarget, duration, delay, data){
+function EKTween(target, appliedTarget, duration, delay, data, hasFrom){
     
     this._target = target;
     this._appliedTarget = appliedTarget;
@@ -277,6 +277,8 @@ function EKTween(target, appliedTarget, duration, delay, data){
     this._currentTime = new Date().getTime();
     this._startTime = delay * 1000 + this._currentTime;
     this._durationTime = duration * 1000;
+    this._hasFrom = hasFrom;
+    
     
     this.isFinished = false;
     this.ease = EKTweenFunc.easeOutCirc;
@@ -400,17 +402,17 @@ EKTween.prototype = {
                     }
                 }else{
 
-                    for(var i in this.properties){
+                    if(!this._hasFrom) for(var i in this.properties){
                         this.setProperty(i, this.properties[i]);
                     }
                     
-                       if (this.onStart) {
-                           if (this.onStartParams) {
-                               this.onStart.apply(this, this.onStartParams);
-                           } else {
-                               this.onStart();
-                           }
-                       }
+                    if (this.onStart) {
+                        if (this.onStartParams) {
+                            this.onStart.apply(this, this.onStartParams);
+                        } else {
+                            this.onStart();
+                        }
+                    }
                     this._isStarted = true;
                 }
             };
@@ -500,7 +502,6 @@ EKTween.prototype = {
                 this.properties[propertyName][1] = value;
             }
         }
-        this.setEaseValue(propertyName, this.properties[propertyName]);
     },
     
     changeTo: function (propertyName, value) {
