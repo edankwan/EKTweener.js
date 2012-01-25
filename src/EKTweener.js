@@ -1,6 +1,6 @@
 /**
 *
-* Version:  0.3.2
+* Version:  0.3.2.1
 * Author:   Edan Kwan
 * Contact:  info@edankwan.com
 * Website:  http://www.edankwan.com/
@@ -205,7 +205,7 @@ EKTweener = (function() {
         var ekTween = to(target, duration, toData, true);
         if(_isHTMLElement(target))_parseDataNaming(fromData);
         for (var i in fromData) ekTween.changeFrom(i, fromData[i]);
-        
+        ekTween.onLoop();
         return ekTween;
     };
 
