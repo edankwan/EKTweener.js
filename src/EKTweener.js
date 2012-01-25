@@ -1,10 +1,10 @@
 /**
 *
-* Version: 	0.3.1
-* Author:	Edan Kwan
-* Contact: 	info@edankwan.com
-* Website:	http://www.edankwan.com/
-* Twitter:	@edankwan
+* Version:  0.3.2
+* Author:   Edan Kwan
+* Contact:  info@edankwan.com
+* Website:  http://www.edankwan.com/
+* Twitter:  @edankwan
 *
 * Copyright (c) 2012 Edan Kwan
 * 
@@ -107,60 +107,59 @@ EKTweener = (function() {
     function _isStyle(target){
         return typeof CSSStyleDeclaration === "object" ? target instanceof CSSStyleDeclaration :  typeof target === "object" && typeof target.cssText ==="string";
     };
-	function _init(){
-		var testedElement = document.createElement("div");
-		var browserPrefixes = 'Webkit Moz O ms'.split(' ');
-		var i = browserPrefixes.length;
-    	while(i--){
-    		if(browserPrefixes[i]+"Transform" in testedElement.style) {
-    			_browserPrefix = browserPrefixes[i];
-    			break;
-    		}
-    	}
-	}
-	
-	
-	/*
-	 *  change the style alias into the real style name and then add the browser prefix
-	 */
-	function getPropertyName(name){
-		if(HTMLStyleAlias[name]) name = HTMLStyleAlias[name];
-		for(var i = 0; i<HTMLPrefixedStyle.length;i++) if(HTMLPrefixedStyle[i] === name) return _browserPrefix + name.charAt(0).toUpperCase() + name.slice(1);
-		return name;
-	}
-	
-	
-	function _parseDataNaming(data){
-		
-		for(var name in data){
-			var newName = name;
-			if(HTMLStyleAlias[name]) newName = HTMLStyleAlias[name];
-			for(var i = 0; i<HTMLPrefixedStyle.length;i++) if(HTMLPrefixedStyle[i] === newName) {newName = _browserPrefix + newName.charAt(0).toUpperCase() + newName.slice(1); break};
-			if(name !== newName){
-				data[newName] = data[name];
-				delete data[name];
-			}
-		}
-		for(var name in data.plugin){
-			var newName = name;
-			if(HTMLStyleAlias[name]) newName = HTMLStyleAlias[name];
-			for(var i = 0; i<HTMLPrefixedStyle.length;i++) if(HTMLPrefixedStyle[i] === newName) {newName = _browserPrefix + newName.charAt(0).toUpperCase() + newName.slice(1); break};
-			if(name !== newName){
-				data.plugin[newName] = data.plugin[name];
-				delete data.plugin[name];
-			}
-		}
-	}
-	
+    function _init(){
+        var testedElement = document.createElement("div");
+        var browserPrefixes = 'Webkit Moz O ms'.split(' ');
+        var i = browserPrefixes.length;
+        while(i--){
+            if(browserPrefixes[i]+"Transform" in testedElement.style) {
+                _browserPrefix = browserPrefixes[i];
+                break;
+            }
+        }
+    }
+    
+    
+    /*
+     *  change the style alias into the real style name and then add the browser prefix
+     */
+    function getPropertyName(name){
+        if(HTMLStyleAlias[name]) name = HTMLStyleAlias[name];
+        for(var i = 0; i<HTMLPrefixedStyle.length;i++) if(HTMLPrefixedStyle[i] === name) return _browserPrefix + name.charAt(0).toUpperCase() + name.slice(1);
+        return name;
+    }
+    
+    
+    function _parseDataNaming(data){
+        
+        for(var name in data){
+            var newName = name;
+            if(HTMLStyleAlias[name]) newName = HTMLStyleAlias[name];
+            for(var i = 0; i<HTMLPrefixedStyle.length;i++) if(HTMLPrefixedStyle[i] === newName) {newName = _browserPrefix + newName.charAt(0).toUpperCase() + newName.slice(1); break};
+            if(name !== newName){
+                data[newName] = data[name];
+                delete data[name];
+            }
+        }
+        for(var name in data.plugin){
+            var newName = name;
+            if(HTMLStyleAlias[name]) newName = HTMLStyleAlias[name];
+            for(var i = 0; i<HTMLPrefixedStyle.length;i++) if(HTMLPrefixedStyle[i] === newName) {newName = _browserPrefix + newName.charAt(0).toUpperCase() + newName.slice(1); break};
+            if(name !== newName){
+                data.plugin[newName] = data.plugin[name];
+                delete data.plugin[name];
+            }
+        }
+    }
+    
     /*
      * automatically apply plugins and suffix values
      */ 
-	function _parseHTMLStyle(target, data){
-		target.computedStyle = window.getComputedStyle(target);
-		if(!data.plugin) data.plugin = {};
-		if(!data.suffix) data.suffix = {};
+    function _parseHTMLStyle(target, data){
+        if(!data.plugin) data.plugin = {};
+        if(!data.suffix) data.suffix = {};
         for(property in data) {
-        	if(HTMLPlugins[property] && !data.plugin[property]) {
+            if(HTMLPlugins[property] && !data.plugin[property]) {
                 data.plugin[property] = HTMLPlugins[property];
             }
             if(HTMLSuffix[property] && !data.suffix[property]){
@@ -168,17 +167,17 @@ EKTweener = (function() {
             }
         }
         _parseDataNaming(data);
-	}
-	
+    }
+    
     function to(target, duration, data, hasFrom) {
-    	var appliedTarget;
-    	if(_isHTMLElement(target)){
-    		appliedTarget = target.style;
-    		_parseHTMLStyle(target, data)
-    	}else{
-    		appliedTarget = target;
-    		data.appliedTarget = target;
-    	}
+        var appliedTarget;
+        if(_isHTMLElement(target)){
+            appliedTarget = target.style;
+            _parseHTMLStyle(target, data)
+        }else{
+            appliedTarget = target;
+            data.appliedTarget = target;
+        }
 
         // implant an array of tweenIds to the target
         if (typeof target.tweenId === "undefined") {
@@ -230,9 +229,9 @@ EKTweener = (function() {
     };
     
     function getTween(target, propertyName){
-    	
-    	if(HTMLStyleAlias[propertyName]) propertyName = HTMLStyleAlias[propertyName];
-    	
+        
+        if(HTMLStyleAlias[propertyName]) propertyName = HTMLStyleAlias[propertyName];
+        
         // get a tween of a target by the propertyName
         var arr = getTweens(target);
         if(!arr) return null;
@@ -345,8 +344,8 @@ EKTween.prototype = {
             };
         };
         
-    	delete this._data;
-    	
+        delete this._data;
+        
         function bind(fn, scope){
             return function(){
                 return fn.apply(scope, Array.prototype.slice.call(arguments));
@@ -433,15 +432,15 @@ EKTween.prototype = {
             }
         };
         if(this._isStyle) {
-        	var currentValue = this.getCurrentPropertyValue(propertyName);
-        	if(this.plugin[propertyName]) {
-        		this.plugin[propertyName].setFrom(currentValue);
-        		property[1] = 0;
-        	}else{
-        		property[1] = parseFloat(currentValue);
-        	}
+            var currentValue = this.getCurrentPropertyValue(propertyName);
+            if(this.plugin[propertyName]) {
+                this.plugin[propertyName].setFrom(currentValue);
+                property[1] = 0;
+            }else{
+                property[1] = parseFloat(currentValue);
+            }
         }else{
-        	property[1] = this._appliedTarget[propertyName];
+            property[1] = this._appliedTarget[propertyName];
         }
         if(isNaN(property[1])) property[1] = 0;
     },
@@ -466,17 +465,17 @@ EKTween.prototype = {
     },
     
     pause: function(){
-    	if(this._pauseTime==0) this._pauseTime = new Date().getTime();
+        if(this._pauseTime==0) this._pauseTime = new Date().getTime();
         this._isPaused = true;
     },
     resume: function(){
-    	if(this._pauseTime>0) {
-    		var timeDiff = new Date().getTime() - this._pauseTime;
-    		this._currentTime += timeDiff;
-    		this._startTime += timeDiff;
-    		_pauseTime = new Date().getTime();
-    		this._pauseTime = 0;
-    	} 
+        if(this._pauseTime>0) {
+            var timeDiff = new Date().getTime() - this._pauseTime;
+            this._currentTime += timeDiff;
+            this._startTime += timeDiff;
+            _pauseTime = new Date().getTime();
+            this._pauseTime = 0;
+        } 
         if (this._isPaused) this._isPaused = false;
     },
     removeProperties: function(propertyNames){
@@ -493,7 +492,7 @@ EKTween.prototype = {
         return 0;
     },
     changeFrom: function (propertyName, value) {
-    	if(this._isHTML)propertyName = getPropertyName(propertyName);
+        if(this._isHTML)propertyName = getPropertyName(propertyName);
         this.setProperty(propertyName, this.properties[propertyName]);
         if (this.properties[propertyName]) {
             if (this.plugin[propertyName]) {
@@ -505,7 +504,7 @@ EKTween.prototype = {
     },
     
     changeTo: function (propertyName, value) {
-    	if(this._isHTML)propertyName = getPropertyName(propertyName);
+        if(this._isHTML)propertyName = getPropertyName(propertyName);
         if (this.properties[propertyName]) {
             if (this.plugin[propertyName]) {
                 this.plugin[propertyName].setTo(value);
@@ -518,11 +517,11 @@ EKTween.prototype = {
     getCurrentPropertyValue: function(propertyName){
         var re = /[A-Z]/g;
         if (re.test(propertyName)) {
-    		propertyName = propertyName.replace(re, function() {return "-" + arguments[0].toLowerCase()});
-    		if(propertyName.indexOf("ms") == 0) propertyName = "-" + propertyName;
+            propertyName = propertyName.replace(re, function() {return "-" + arguments[0].toLowerCase()});
+            if(propertyName.indexOf("ms") == 0) propertyName = "-" + propertyName;
         }
         
-    	return this._target.computedStyle.getPropertyValue(propertyName);
+        return window.getComputedStyle(this._target).getPropertyValue(propertyName);
     }
 };
 
@@ -696,7 +695,6 @@ var EKTweenFunc = {
         return EKTweenFunc.easeInBounce((t*2)-d, b+c/2, c/2, d);
     }
 };
-
 
 
 
