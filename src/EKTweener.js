@@ -1,6 +1,6 @@
 /**
 *
-* Version:  0.3.2.1
+* Version:  0.3.2.2
 * Author:   Edan Kwan
 * Contact:  info@edankwan.com
 * Website:  http://www.edankwan.com/
@@ -374,33 +374,8 @@ EKTween.prototype = {
         this._currentTime = new Date().getTime();
         if (!this._isPaused) {
             if (this._currentTime >= this._startTime) {
-                if (this._isStarted) {
-                    if (this._currentTime >= this._durationTime + this._startTime) {
-                        for(var i in this.properties){
-                            this.setValue(this.properties[i][0], i, this.properties[i]);
-                        }
-                        this.update();
-                        if (this.onComplete) {
-                            if (this.onCompleteParams) {
-                                this.onComplete.apply(this, this.onCompleteParams);
-                            } else {
-                                this.onComplete();
-                            }
-                        }
-                        this.kill();
-                        i = this.tweens.length;
-                        while(i--){
-                            if(this.tweens[i])if(this.tweens[i].isFinished) this.tweens.splice(i, 1);
-                        }
-                        return;
-                    }else{
-                        for(var i in this.properties){
-                            this.setEaseValue(i, this.properties[i]);
-                        }
-                        this.update();
-                    }
-                }else{
-
+                
+                if (!this._isStarted) {
                     if(!this._hasFrom) for(var i in this.properties){
                         this.setProperty(i, this.properties[i]);
                     }
@@ -414,6 +389,32 @@ EKTween.prototype = {
                     }
                     this._isStarted = true;
                 }
+                
+                if (this._currentTime >= this._durationTime + this._startTime) {
+                    for(var i in this.properties){
+                        this.setValue(this.properties[i][0], i, this.properties[i]);
+                    }
+                    this.update();
+                    if (this.onComplete) {
+                        if (this.onCompleteParams) {
+                            this.onComplete.apply(this, this.onCompleteParams);
+                        } else {
+                            this.onComplete();
+                        }
+                    }
+                    this.kill();
+                    i = this.tweens.length;
+                    while(i--){
+                        if(this.tweens[i])if(this.tweens[i].isFinished) this.tweens.splice(i, 1);
+                    }
+                    return;
+                }else{
+                    for(var i in this.properties){
+                        this.setEaseValue(i, this.properties[i]);
+                    }
+                    this.update();
+                }
+                
             };
         };
         
