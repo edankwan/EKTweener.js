@@ -522,7 +522,7 @@ EKTween.prototype = {
             if(propertyName.indexOf("ms") == 0) propertyName = "-" + propertyName;
         }
         
-        return window.getComputedStyle(this._target).getPropertyValue(propertyName);
+        return window.getComputedStyle(this._target,"null").getPropertyValue(propertyName);
     }
 };
 
