@@ -71,11 +71,13 @@ if (!window.getComputedStyle) {
 }
 
 
-EKTweener = (function() {
+EKTweener = (function(doc, w) {
 
     var app = {};
     
     var _browserPrefix = "";
+    var _dummy;
+    var _dummyStyle;
     
     var HTMLPlugins = {};
     var HTMLPrefixedStyle = [];
@@ -108,7 +110,7 @@ EKTweener = (function() {
         return typeof CSSStyleDeclaration === "object" ? target instanceof CSSStyleDeclaration :  typeof target === "object" && typeof target.cssText ==="string";
     };
     function _init(){
-        var testedElement = document.createElement("div");
+        var testedElement = doc.createElement("div");
         var browserPrefixes = 'Webkit Moz O ms'.split(' ');
         var i = browserPrefixes.length;
         while(i--){
@@ -240,6 +242,36 @@ EKTweener = (function() {
         return null;
     };
     
+    function getStyle(name, cssText){
+        propertyName = getPropertyName(name);
+        var styleName;
+        var re = /[A-Z]/g;
+        if (re.test(propertyName)) {
+            styleName = propertyName.replace(re, function() {return "-" + arguments[0].toLowerCase()});
+            if(styleName.indexOf("ms") == 0) styleName = "-" + styleName;
+        }
+        if(doc.body){
+            if(!_dummy) {
+                _dummy = doc.createElement("div");
+                _dummyStyle = _dummy.style;
+                _dummyStyle.position = "absolute";
+                _dummyStyle.top = _dummyStyle.left = "-9000px";
+                document.body.appendChild(_dummy);
+            }
+            _dummyStyle[propertyName] = cssText;
+            return w.getComputedStyle(_dummy, "null").getPropertyValue(styleName);
+        }
+        var fakeBody = doc.createElement("body");
+        var dummy = doc.createElement("div");
+        doc.documentElement.appendChild(fakeBody);
+        fakeBody.appendChild(dummy);
+        _dummyStyle[propertyName] = cssText;
+        var computedStyle =  w.getComputedStyle(dummy, "null").getPropertyValue(styleName);
+        doc.documentElement.removeChild(fakeBody);
+        fakeBody = null;
+        dummy = null;
+        return computedStyle;
+    }
     
     _init();
     
@@ -249,6 +281,7 @@ EKTweener = (function() {
     app.HTMLStyleAlias = HTMLStyleAlias;
     
     app.getPropertyName = getPropertyName;
+    app.getStyle = getStyle;
     app.to = to;
     app.fromTo = fromTo;
     app.killTweensOf = killTweensOf;
@@ -257,7 +290,7 @@ EKTweener = (function() {
     
     return app;
     
-})();
+})(document, window);
 
 
 /*

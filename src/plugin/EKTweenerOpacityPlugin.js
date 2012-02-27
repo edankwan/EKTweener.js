@@ -2,7 +2,6 @@ function EKTweenerOpacityPlugin () {
     
     var _from;
     var _to;
-    var _style;
     
     this.setFrom  = function (from) {
         if(!from){
