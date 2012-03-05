@@ -1,4 +1,4 @@
-# Hasher Changelog #
+# EKTweener.js Changelog #
 
 
 ## v0.3.2 (25/1/2012) ##
