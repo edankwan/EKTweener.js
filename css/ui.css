@@ -1,0 +1,165 @@
+@media screen {
+@font-face {
+  font-family: 'Josefin Slab';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Josefin Slab Bold Italic'), local('JosefinSlab-BoldItalic'), url('http://themes.googleusercontent.com/static/fonts/josefinslab/v3/af9sBoKGPbGO0r21xJuly70qgHI2SEqiJszC-CVc3gY.woff') format('woff');
+}
+}
+@media screen {
+@font-face {
+  font-family: 'Josefin Slab';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Josefin Slab Bold'), local('JosefinSlab-Bold'), url('http://themes.googleusercontent.com/static/fonts/josefinslab/v3/NbE6ykYuM2IyEwxQxOIi2Hl4twXkwp3_u9ZoePkT564.woff') format('woff');
+}
+html, body{
+  font-family: 'Josefin Slab', Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  background-color: #FFF;
+  color: #252544;
+  
+  min-width: 880px;
+  overflow: hidden;
+}
+h4 {
+    font-size: 18px;
+    line-height: 32px;
+    margin-top: 12px;
+    color: #000;
+}
+ol{
+    padding-left: 28px;
+}
+li {
+    list-style-type: square;
+}
+.italic{
+    font-style: italic;
+}
+.underline{
+    text-decoration: underline;
+}
+textarea, .code{
+  font-family: 'Josefin Slab', Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 700;
+    position: relative;
+    width: 570px;
+    border: 3px solid #eeeceb;
+    padding: 5px;
+    background-color: #f5f3f2;
+    color: #000;
+    
+}
+
+#menu{
+    position: absolute;
+    width: 225px;
+    height: 100%;
+    background-color: #EFEFEF;
+    padding-left: 18px;
+    overflow: hidden;
+}
+#menu .logo{
+    width: 200px;
+    height: 128px;
+    background-image: url(../images/logo.gif);
+    margin-top: 10px;
+}
+
+#menu .line{
+    position: absolute;
+    top: 0;
+    right: 3px;
+    width: 1px;
+    height: 100%;
+    background-color: #FFF;
+}
+#menu h3 {
+    font-size: 18px;
+    margin-top: 16px;
+    line-height: 15px;
+    margin-bottom: 16px;
+    color: #000;
+}
+#menu li {
+    margin-left: 10px;
+}
+#menu a {
+    display: block;
+    width: 100%;
+    font-size: 14px;
+    margin-top: 8px;
+    color: #000;
+}
+#container{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow:auto;
+}
+#container .wrapper{
+    position: absolute;
+    margin-left: 280px;
+    line-height: 18px;
+}
+#container .title{
+    margin-top: 40px;
+    font-size: 24px;
+    color: #000;
+}
+#container .line{
+    width: 580px;
+    height: 1px;
+    line-height: 1px;
+    background-color: #EFEFEF;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#container .canvas{
+    position: relative;
+    width: 580px;
+    height: 380px;
+    top: 10px;
+    border: 3px solid #eeeceb;
+    background-color: #f5f3f2;
+}
+#container .body{
+    position: relative;
+    top: 30px;
+    width: 580px;
+    line-height: 22px;
+}
+#container .img{
+    position: absolute;
+    width: 128px;
+    height: 128px;
+    background-image: url(../images/img.jpg);
+    transition: border .2s;
+    -webkit-transition: border .2s;
+    -moz-transition: border .2s;
+    -ms-transition: border .2s;
+    -o-transition: border .2s;
+    
+    margin-left: -5px;
+    margin-top: -5px;
+    border: 5px solid transparent;
+}
+#container .btn{
+    position: absolute;
+    width: 120px;
+    height: 22px;
+    right: 8px;
+    bottom: 8px;
+    background-color: #DFDFDF;
+    border: 3px solid #CCC;
+    text-align: center;
+    font-size: 14px;
+    cursor: pointer;
+}
+#container .img:hover{
+    border: 5px solid #FFF;
+}

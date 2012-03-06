@@ -1,0 +1,62 @@
+<html>
+    <head>
+        <title>EKTweener.js - fromTo()</title>
+        <link rel="stylesheet" href="css/reset.css" type="text/css">
+        <link rel="stylesheet" href="css/ui.css" type="text/css">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script src="https://raw.github.com/edankwan/EKTweener.js/master/dist/EKTweener.all.js"></script>
+        <script src="js/ui.js"></script>
+        <!---
+            The script of example script of this page is at the bottom of the source.
+            --->
+    </head>
+    <body>
+        <div id="container">
+            <div class="wrapper">
+                <div class="title">EKTweener.fromTo()</div>
+                <div class="line"></div>
+                <div id="canvas" class="canvas">
+                    <div id="img" class="img"></div>
+                    <div id="btn" class="btn">CLICK HERE</div>
+                </div>
+                <div class="body">
+                    This is an example of using the basic EKTweener.fromTo() transition.<br/><br/>
+                    <div class="code">EKTweener.fromTo(element, duration, {from properties}, {to properties});</div><br/>
+                    <ol>
+                        <li><span class="italic">element</span> can be the dom element or just an object</li>
+                        <li><span class="italic">duration</span> is the duration of the transition in second</li>
+                        <li><span class="italic">from properties</span> are the properties of the element you want to tween from</li>
+                        <li><span class="italic">to properties</span> are the properties of the element you want to tween to</li>
+                    </ol> 
+                    
+                    <h4>Other examples:</h4>
+                    <textarea rows=3 wrap=off readonly>
+EKTweener.fromTo(img, 1, {left: 10, top: 10}, {left: 100, top: 100});
+EKTweener.fromTo(img, 1, {width: 100}, {width: 50});
+                    </textarea><br/><br/>
+                    <br/>
+                    <br/>
+                </div>
+            </div>
+        </div>
+        <div id="menu"> </div>
+        
+        
+        
+        
+        <script>
+            /***** Source code *****/
+            var img;
+            var btn;
+            function tweenIt(){
+                EKTweener.fromTo(img, 1, {left: 0, top: 0}, {
+                    left: Math.random() * 452,
+                    top: Math.random() * 252
+                });
+            }
+            img = document.getElementById("img");
+            btn = document.getElementById("btn");
+            btn.onclick = tweenIt;
+        </script>
+    </body>
+</html>

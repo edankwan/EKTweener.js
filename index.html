@@ -1,1 +1,42 @@
-My GitHub Page
+<html>
+    <head>
+        <title>EKTweener.js - Index</title>
+        <link rel="stylesheet" href="css/reset.css" type="text/css">
+        <link rel="stylesheet" href="css/ui.css" type="text/css">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script src="../dist/EKTweener.all.js"></script>
+        <script src="js/ui.js"></script>
+        <!---
+            The script of example script of this page is at the bottom of the source.
+            --->
+    </head>
+    <body>
+        <div id="container">
+            <div class="wrapper">
+                <div class="title">Index</div>
+                <div class="body">
+                    <p>EKTweener.js is a simple transition library using the style like Tweener and TweenMax on Flash platform.</p>
+                </div>
+            </div>
+        </div>
+        <div id="menu"> </div>
+        
+        
+        
+        
+        <script>
+            /***** Source code *****/
+            var img;
+            var btn;
+            function tweenIt(){
+                EKTweener.to(img, 1, {
+                    left: Math.random() * 452,
+                    top: Math.random() * 252
+                });
+            }
+            img = document.getElementById("img");
+            btn = document.getElementById("btn");
+            btn.onclick = tweenIt;
+        </script>
+    </body>
+</html>
