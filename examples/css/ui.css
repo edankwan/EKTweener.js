@@ -13,29 +13,15 @@
   font-weight: 700;
   src: local('Josefin Slab Bold'), local('JosefinSlab-Bold'), url('http://themes.googleusercontent.com/static/fonts/josefinslab/v3/NbE6ykYuM2IyEwxQxOIi2Hl4twXkwp3_u9ZoePkT564.woff') format('woff');
 }
-}
-@media screen {
-@font-face {
-  font-family: 'Josefin Slab';
-  font-style: normal;
-  font-weight: 600;
-  src: local('Josefin Slab SemiBold'), local('JosefinSlab-SemiBold'), url('http://themes.googleusercontent.com/static/fonts/josefinslab/v3/NbE6ykYuM2IyEwxQxOIi2NOd4RnLmtUrdSQkDmC5b8k.woff') format('woff');
-}
-}
-@media screen {
-@font-face {
-  font-family: 'Josefin Slab';
-  font-style: italic;
-  font-weight: 600;
-  src: local('Josefin Slab SemiBold Italic'), local('JosefinSlab-SemiBoldItalic'), url('http://themes.googleusercontent.com/static/fonts/josefinslab/v3/af9sBoKGPbGO0r21xJuly6xza3rXaV_G32gF04a66fI.woff') format('woff');
-}
-}
-html{
+html, body{
   font-family: 'Josefin Slab', Arial, Helvetica, sans-serif;
   font-style: normal;
   font-weight: 700;
   background-color: #FFF;
   color: #252544;
+  
+  min-width: 880px;
+  overflow: hidden;
 }
 h4 {
     font-size: 18px;
@@ -52,73 +38,88 @@ li {
 .italic{
     font-style: italic;
 }
-.code{
+.underline{
+    text-decoration: underline;
+}
+textarea, .code{
+  font-family: 'Josefin Slab', Arial, Helvetica, sans-serif;
+  font-style: normal;
+  font-weight: 700;
     position: relative;
     width: 570px;
     border: 3px solid #eeeceb;
     padding: 5px;
     background-color: #f5f3f2;
     color: #000;
-}
-.line{
-	width: 100%;
-	height: 1px;
-	line-height: 1px;
-	background-color: #EFEFEF;
-	margin-top: 10px;
-	margin-bottom: 10px;
+    
 }
 
+#menu{
+    position: absolute;
+    width: 240px;
+    height: 100%;
+    background-color: #EFEFEF;
+    overflow: hidden;
+}
+#menu .logo{
+    width: 200px;
+    height: 128px;
+    background-image: url(../images/logo.gif);
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
 
+#menu .line{
+    position: absolute;
+    top: 0;
+    right: 3px;
+    width: 1px;
+    height: 100%;
+    background-color: #FFF;
+}
+#menu h3 {
+    font-size: 18px;
+    margin-top: 16px;
+    margin-left: 17px;
+    line-height: 15px;
+    margin-bottom: 16px;
+    color: #000;
+}
+#menu a {
+    display: block;
+    width: 100%;
+    font-size: 14px;
+    margin-top: 8px;
+    margin-left: 25px;
+    color: #000;
+}
 #container{
-    position: relative;
-    width: 580px;
-    border: 70px solid transparent;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow:auto;
 }
-#title{
+#container .wrapper{
+    position: absolute;
+    margin-left: 280px;
+    line-height: 18px;
+}
+#container .title{
+    margin-top: 40px;
     font-size: 24px;
     color: #000;
 }
-.view-source{
-    position: absolute;
-    right: -6px;
-    top: 5px;
-    width: 90px;
-    height: 19px;
-    
-    text-align: center;
-    cursor: pointer;
-}
-.view-source .bg{
-    left: 0px;
-    top: 0px;
-    width: 0%;
-    height: 100%;
-    position: absolute;
-    background-color: #009eff;
-    transition: all .2s;
-    -webkit-transition: all .2s;
-    -moz-transition: all .2s;
-    -ms-transition: all .2s;
-    -o-transition: all .2s;
-}
-.view-source:hover .bg{
-    width: 100%;
-}
-.view-source .text{
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-    
-    color: #000;
-}
-.view-source:hover .text{
-    color: #FFF;
+#container .line{
+    width: 580px;
+    height: 1px;
+    line-height: 1px;
+    background-color: #EFEFEF;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
-.canvas{
+#container .canvas{
     position: relative;
     width: 580px;
     height: 380px;
@@ -126,13 +127,13 @@ li {
     border: 3px solid #eeeceb;
     background-color: #f5f3f2;
 }
-.body{
+#container .body{
     position: relative;
     top: 30px;
-    width: 100%;
+    width: 580px;
     line-height: 22px;
 }
-.img{
+#container .img{
     position: absolute;
     width: 128px;
     height: 128px;
@@ -146,8 +147,19 @@ li {
     margin-left: -5px;
     margin-top: -5px;
     border: 5px solid transparent;
+}
+#container .btn{
+    position: absolute;
+    width: 120px;
+    height: 22px;
+    right: 8px;
+    bottom: 8px;
+    background-color: #DFDFDF;
+    border: 3px solid #CCC;
+    text-align: center;
+    font-size: 14px;
     cursor: pointer;
 }
-.img:hover{
+#container .img:hover{
     border: 5px solid #FFF;
 }

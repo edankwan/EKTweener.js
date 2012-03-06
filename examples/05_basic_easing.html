@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>EKTweener.js - Delay transition</title>
+        <title>EKTweener.js - Easing</title>
         <link rel="stylesheet" href="css/reset.css" type="text/css">
         <link rel="stylesheet" href="css/ui.css" type="text/css">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -13,32 +13,34 @@
     <body>
         <div id="container">
             <div class="wrapper">
-                <div class="title">Delay</div>
+                <div class="title">Easing</div>
                 <div class="line"></div>
                 <div id="canvas" class="canvas">
                     <div id="img" class="img"></div>
                     <div id="btn" class="btn">CLICK HERE</div>
                 </div>
                 <div class="body">
-                    This is an example of using the "delay" special property.<br/><br/>
+                    This is an example of using easing<br/><br/>
                     In this example we use: <br/>
-                    <div class="code">EKTweener.fromTo(img, 0.5, {left: 0, top: 0}, {delay: 1, left: 452, top: 252});</div><br/>
-                    In this example, I added a delay in a fromTo function to make it pauses for half second before the transition. You may notice that the second time you click the image, the image doesn't go to (0,0) immediately because the from properties will apply after the delay of the transition.<br/><br/> 
-                    
-                    <textarea class="code" rows=8 readonly>
-EKTweener.fromTo(img, 0.5, {
-    left: 0, 
-    top: 0
-}, {
-    delay: 1,
-    left: 452,
-    top: 252
-});
-                    </textarea><br/><br/>
+                    <textarea rows=11 wrap=off readonly>
+var i = 0;
+            var easing = ["easeOutBounce","easeInQuart","easeOutElastic"];
+EKTweener.to(img, 0.5, {
+    left: Math.random() * 452,
+    top: Math.random() *  252,
+    onComplete: function(){
+        alert(easing[i]);
+        if(i++ ==2) i=0;
+    },
+    ease: easing[i]
+}
+                    </textarea ><br/><br/>
+                    In this example, I use 3 different easing functions. Since I adapted the functions from Tweener, you can simply use the Tweener cheat sheet <a target="_blank" href="http://hosted.zeh.com.br/tweener/docs/en-us/misc/transitions.html">here</a>
+
                     <h4>Other examples:</h4>
                     <textarea rows=3 wrap=off readonly>
-EKTweener.to(img, 1, {delay: 1, left: 200});
-EKTweener.to(img, 1, {delay: 0.5, width: 100});
+EKTweener.to(img, 1, {left: 200, ease: "easeInOutSine"});
+EKTweener.to(img, 1, {left: 120, ease: "easeInElastic"});
                     </textarea><br/><br/>
                     <br/>
                     <br/>
@@ -50,12 +52,22 @@ EKTweener.to(img, 1, {delay: 0.5, width: 100});
         
         
         
-        <script>
+        <script >
             /***** Source code *****/
             var img;
             var btn;
+            var i = 0;
+            var easing = ["easeOutBounce","easeInQuart","easeOutElastic"];
             function tweenIt(){
-                EKTweener.fromTo(img, 0.5, {left: 0, top: 0}, {delay: 1, left: 452, top: 252});
+                EKTweener.to(img, 0.5, {
+                    left: Math.random() * 452,
+                    top: Math.random() *  252,
+                    onComplete: function(){
+                        alert(easing[i]);
+                        if(i++ ==2) i=0;
+                    },
+                    ease: easing[i]
+                });
             }
             img = document.getElementById("img");
             btn = document.getElementById("btn");
