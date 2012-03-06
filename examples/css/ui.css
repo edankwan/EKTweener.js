@@ -60,19 +60,26 @@ li {
     background-color: #f5f3f2;
     color: #000;
 }
-
+.line{
+	width: 100%;
+	height: 1px;
+	line-height: 1px;
+	background-color: #EFEFEF;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
 
 
 #container{
     position: relative;
     width: 580px;
-    border: 70px solid #FFF;
+    border: 70px solid transparent;
 }
 #title{
     font-size: 24px;
     color: #000;
 }
-#view-source{
+.view-source{
     position: absolute;
     right: -6px;
     top: 5px;
@@ -82,7 +89,7 @@ li {
     text-align: center;
     cursor: pointer;
 }
-#view-source .bg{
+.view-source .bg{
     left: 0px;
     top: 0px;
     width: 0%;
@@ -95,10 +102,10 @@ li {
     -ms-transition: all .2s;
     -o-transition: all .2s;
 }
-#view-source:hover .bg{
+.view-source:hover .bg{
     width: 100%;
 }
-#view-source .text{
+.view-source .text{
     position: absolute;
     left: 0px;
     top: 0px;
@@ -107,11 +114,11 @@ li {
     
     color: #000;
 }
-#view-source:hover .text{
+.view-source:hover .text{
     color: #FFF;
 }
 
-#canvas{
+.canvas{
     position: relative;
     width: 580px;
     height: 380px;
@@ -119,13 +126,13 @@ li {
     border: 3px solid #eeeceb;
     background-color: #f5f3f2;
 }
-#body{
+.body{
     position: relative;
     top: 30px;
     width: 100%;
     line-height: 22px;
 }
-#img{
+.img{
     position: absolute;
     width: 128px;
     height: 128px;
@@ -141,6 +148,6 @@ li {
     border: 5px solid transparent;
     cursor: pointer;
 }
-#img:hover{
+.img:hover{
     border: 5px solid #FFF;
 }

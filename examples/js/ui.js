@@ -9,7 +9,7 @@ ui = (function(){
     var _viewSource;
     
     $(document).ready(function(){
-        _viewSource = $("#view-source");
+        _viewSource = $(".view-source");
         _viewSource.click(function(){
             window.open("view-source:" + window.location.href, "view-source", "width=720,height: 580");
         });

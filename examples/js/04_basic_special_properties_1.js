@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>EKTweener.js - Basic delay transition</title>
+        <title>EKTweener.js - Basic special properties 1</title>
         <link rel="stylesheet" href="css/reset.css" type="text/css">
         <link rel="stylesheet" href="css/ui.css" type="text/css">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
