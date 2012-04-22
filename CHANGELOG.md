@@ -1,6 +1,14 @@
 # EKTweener.js Changelog #
 
 
+## v0.3.4 (22/4/2012) ##
+
+ - added yoyo effect(better work with fromTo)
+
+## v0.3.2.2 (25/2/2012) ##
+
+ - added transform 3d support
+ 
 ## v0.3.2 (25/1/2012) ##
 
  - get the computed Style realtime instead of store it up. It fixed the problem on IE7-8

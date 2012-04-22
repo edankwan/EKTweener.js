@@ -1,6 +1,6 @@
 /**
 *
-* Version:  0.3.2.2
+* Version:  0.3.3
 * Author:   Edan Kwan
 * Contact:  info@edankwan.com
 * Website:  http://www.edankwan.com/
@@ -72,7 +72,8 @@ if (!window.getComputedStyle) {
 
 
 EKTweener = (function(doc, w) {
-
+    
+    var undef;
     var app = {};
     
     var _browserPrefix = "";
@@ -131,9 +132,7 @@ EKTweener = (function(doc, w) {
         return name;
     }
     
-    
-    function _parseDataNaming(data){
-        
+    function _parseNaming(data){
         for(var name in data){
             var newName = name;
             if(HTMLStyleAlias[name]) newName = HTMLStyleAlias[name];
@@ -143,15 +142,10 @@ EKTweener = (function(doc, w) {
                 delete data[name];
             }
         }
-        for(var name in data.plugin){
-            var newName = name;
-            if(HTMLStyleAlias[name]) newName = HTMLStyleAlias[name];
-            for(var i = 0; i<HTMLPrefixedStyle.length;i++) if(HTMLPrefixedStyle[i] === newName) {newName = _browserPrefix + newName.charAt(0).toUpperCase() + newName.slice(1); break};
-            if(name !== newName){
-                data.plugin[newName] = data.plugin[name];
-                delete data.plugin[name];
-            }
-        }
+    }
+    function _parseDataNaming(data){
+        _parseNaming(data);
+        _parseNaming(data.plugin);
     }
     
     /*
@@ -173,9 +167,9 @@ EKTweener = (function(doc, w) {
     
     function to(target, duration, data, hasFrom) {
         var appliedTarget;
-        if(_isHTMLElement(target)){
+        if(_isHTMLElement(target)&&data.skipHTMLParsing!=true){
             appliedTarget = target.style;
-            _parseHTMLStyle(target, data)
+            _parseHTMLStyle(target, data);
         }else{
             appliedTarget = target;
             data.appliedTarget = target;
@@ -187,17 +181,14 @@ EKTweener = (function(doc, w) {
             _targetTweens[target.tweenId] = [];
         }
         
-        // if there is no user added delay value, use 0 
-        var delay = 0;
-        if(data.delay){
-            delay = data.delay;
-            delete data.delay;
-        }
+        // if there is no user added delay value, use 0
+        var delay = data.delay == undef? 0 : data.delay;
+        delete data.delay;
         
         // create a EKTween and add the tween to the list
         var ekTween = new EKTween(target, appliedTarget, duration, delay, data, hasFrom || false);
         _targetTweens[target.tweenId].push(ekTween);
-        
+        if(!hasFrom) ekTween.onLoop();
         return ekTween;
         
     };
@@ -205,7 +196,7 @@ EKTweener = (function(doc, w) {
     function fromTo(target, duration, fromData, toData) {
         // create a EKTween and change the from values afterwards
         var ekTween = to(target, duration, toData, true);
-        if(_isHTMLElement(target))_parseDataNaming(fromData);
+        if(_isHTMLElement(target)&&toData.skipHTMLParsing!=true)_parseDataNaming(fromData);
         for (var i in fromData) ekTween.changeFrom(i, fromData[i]);
         ekTween.onLoop();
         return ekTween;
@@ -324,6 +315,7 @@ function EKTween(target, appliedTarget, duration, delay, data, hasFrom){
     this.properties = {}; // {[to, from, prefix, suffix]}
     this.prefix = {};
     this.suffix = {};
+    this.yoyo = {};
     this.plugin = {};
     
     this.init();
@@ -346,6 +338,7 @@ EKTween.prototype = {
                     break;
                 case "prefix":
                 case "suffix":
+                case "yoyo":
                 case "onStart":
                 case "onStartParams":
                 case "onUpdate":
@@ -360,8 +353,13 @@ EKTween.prototype = {
                     this.properties[i] = [this.plugin[i] ? 1 : this._data[i], 0];
                     if(this.plugin[i])this.plugin[i].setTo(this._data[i], this._appliedTarget);
             }
-    
         };
+        
+        if(this.yoyo && this._isStyle){
+            for(var i = 0; i<this.yoyo.length;i++) {
+                this.yoyo[i] = EKTweener.getPropertyName(this.yoyo[i]);
+            }
+        }
         
         //-------- REMOVE THE REPEATED ITEMS ---------//
         this.tweens = EKTweener.getTweens(this._target);
@@ -386,8 +384,6 @@ EKTween.prototype = {
         };
         
         this.onLoop = bind(this.onLoop, this);
-        this.onLoop();
-        
     },
 
 
@@ -425,7 +421,7 @@ EKTween.prototype = {
                 
                 if (this._currentTime >= this._durationTime + this._startTime) {
                     for(var i in this.properties){
-                        this.setValue(this.properties[i][0], i, this.properties[i]);
+                        this.setValue(this.properties[i][4]?this.properties[i][1]:this.properties[i][0], i, this.properties[i]);
                     }
                     this.update();
                     if (this.onComplete) {
@@ -465,6 +461,14 @@ EKTween.prototype = {
                 property[3] = this.suffix[propertyName];
             }
         };
+        if (this.yoyo) {
+            for(var i = 0; i<this.yoyo.length;i++) {
+                if(this.yoyo[i] === propertyName) {
+                    property[4] = true;
+                    break;
+                }
+            }
+        };
         if(this._isStyle) {
             var currentValue = this.getCurrentPropertyValue(propertyName);
             if(this.plugin[propertyName]) {
@@ -480,7 +484,13 @@ EKTween.prototype = {
     },
 
     setEaseValue: function (propertyName, property) {
-        this.setValue(this.ease(this._currentTime - this._startTime < 0 ? 0 : this._currentTime - this._startTime, property[1], property[0] - property[1], this._durationTime), propertyName, property);
+        if(property[4]) {
+            var d = this._durationTime;
+            var t = (this._currentTime - this._startTime)*2/d;
+            this.setValue(this.ease(t > 1 ? 2 - t : t, property[1], property[0] - property[1], 1), propertyName, property);
+        }else{
+            this.setValue(this.ease(this._currentTime - this._startTime < 0 ? 0 : this._currentTime - this._startTime, property[1], property[0] - property[1], this._durationTime), propertyName, property);
+        }
     },
     
     setValue: function (value, propertyName, property) {
