@@ -1,23 +1,21 @@
-Description
------------
-EKTweener.js is a simple transition library using the style like Tweener and TweenMax on Flash platform.
+EKTweener
 
-Getting Started
------------
+http://edankwan.github.com/EKTweener.js/
+
+EKTweener is a simple tweening library for use in Javascript using the style like Tweener and TweenMax in Flash. It is simple but powerful to handle the transitions of plain object or DOM elements.
+
+I was a Flash developer and now nearly 100% of my work involves HTML/CSS/JS. I got so used to using Tweener and TweenMax in Flash and created EKTweener using the similar structure like:
 ```js
     EKTweener.to(element, duration, { property: options });
 ```
 
-Methods
+Features
 -----------
-```js
-    
-    var container = document.getElementById("container");
-    
-    // move the container from its current top to the 100px in 3 seconds.
-    EKTweener.to(container, 3, {top: 100});
-    
-    // move the container from 200px top to the 100px in 3 seconds.
-    EKTweener.fromTo(container, 3, {top: 200}, {top: 100});
-    
-```
+ - Delay
+ - Events(onStart, onUpdatem onComplete)
+ - All easing function from Tweener.(Cheat sheet)
+ - Opacity filter support
+ - Color tweening
+ - Tranform3d support
+ - Yoyo effect
+ - Custom plugin support
