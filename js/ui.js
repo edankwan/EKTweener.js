@@ -9,6 +9,7 @@ ui = (function(){
             url : "menu.html",
             success : function (data) {
                 $("#menu").html(data);
+                $("body").append($("#ribbon"));
             },
             error: function(){
                 $("#menu").remove();

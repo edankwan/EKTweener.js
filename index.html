@@ -1,10 +1,10 @@
 <html>
     <head>
-        <title>EKTweener.js - Index</title>
+        <title>EKTweener.js</title>
         <link rel="stylesheet" href="css/reset.css" type="text/css">
         <link rel="stylesheet" href="css/ui.css" type="text/css">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-        <script src="../dist/EKTweener.all.js"></script>
+        <script src="https://raw.github.com/edankwan/EKTweener.js/master/dist/EKTweener.all.js"></script>
         <script src="js/ui.js"></script>
         <!---
             The script of example script of this page is at the bottom of the source.
@@ -13,9 +13,23 @@
     <body>
         <div id="container">
             <div class="wrapper">
-                <div class="title">Index</div>
-                <div class="body">
-                    <p>EKTweener.js is a simple transition library using the style like Tweener and TweenMax on Flash platform.</p>
+                <div class="title">What's EKTweener?</div>
+                <div class="line"></div>
+                <div class="long-body">
+                    <p>EKTweener is a simple tweening library for use in Javascript using the style like Tweener and TweenMax in Flash. It is simple but powerful to handle the transitions of plain object or DOM elements.</p>
+                    <p>I was a Flash developer and now nearly 100% of my work involves HTML/CSS/JS. I got so used to using Tweener and TweenMax in Flash and created EKTweener using the similar structure like:</p>
+                    <textarea rows=1 wrap=off readonly>
+EKTweener.to(img, 1, {width: 120, height: 120});
+                    </textarea>
+                    <h4>Features:</h4>
+                    <li>Delay</li>
+                    <li>Events(onStart, onUpdatem onComplete)</li>
+                    <li>All easing function from Tweener.(<a href="http://hosted.zeh.com.br/tweener/docs/en-us/misc/transitions.html" target="_blank">Cheat sheet</a>)</li>
+                    <li>Opacity filter support</li>
+                    <li>Color tweening</li>
+                    <li>Tranform3d support</li>
+                    <li>Yoyo effect</li>
+                    <li>Custom plugin support</li>
                 </div>
             </div>
         </div>
@@ -38,5 +52,6 @@
             btn = document.getElementById("btn");
             btn.onclick = tweenIt;
         </script>
+        
     </body>
 </html>

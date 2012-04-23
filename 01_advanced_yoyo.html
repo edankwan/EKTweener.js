@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>EKTweener.js - Easing</title>
+        <title>EKTweener.js - Yoyo</title>
         <link rel="stylesheet" href="css/reset.css" type="text/css">
         <link rel="stylesheet" href="css/ui.css" type="text/css">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -13,35 +13,26 @@
     <body>
         <div id="container">
             <div class="wrapper">
-                <div class="title">Easing</div>
+                <div class="title">Yoyo</div>
                 <div class="line"></div>
                 <div id="canvas" class="canvas">
                     <div id="img" class="img"></div>
                     <div id="btn" class="btn">CLICK HERE</div>
                 </div>
                 <div class="body">
-                    I adapted the easing equations by Robert Penner, so you can simply copy and paste the easing equation name from  the Tweener cheat sheet <a target="_blank" href="http://hosted.zeh.com.br/tweener/docs/en-us/misc/transitions.html">here</a><br/><br/>
-                    In this example we use: <br/>
-                    <textarea rows=11 wrap=off readonly>
-var i = 0;
-var easing = ["easeOutBounce","easeInQuart","easeOutElastic"];
+                    This is an example of using the yoyo effect.<br/><br/>
+                    <textarea rows=5 wrap=off readonly>
 EKTweener.to(img, 1, {
     left: Math.random() * 452,
-    top: Math.random() *  252,
-    onComplete: function(){
-        alert(easing[i]);
-        if(i++ ==2) i=0;
-    },
-    ease: easing[i]
-}
-                    </textarea ><br/><br/>
-                    In this example, I use 3 different easing functions. Since 
-
-                    <h4>Other examples:</h4>
-                    <textarea rows=3 wrap=off readonly>
-EKTweener.to(img, 1, {left: 200, ease: "easeInOutSine"});
-EKTweener.to(img, 1, {left: 120, ease: "easeInElastic"});
+    top: Math.random() * 252,
+    yoyo: ["top"]
+});
                     </textarea><br/><br/>
+                    <p>The property "yoyo" is an array which contains the properties that you want to use the yoyo effect.</p>
+                    <p>As you might notice that if you click the button again before the previous transition is finished, the from value will become value at the moment you retrigger it. So if you want to make an effect that user may retrigger it during the transition, I recommend you to use fromTo() to make sure the from value stays the same as you expected.</p>
+                    
+                    <br/>
+                    <br/>
                     <br/>
                     <br/>
                 </div>
@@ -52,21 +43,15 @@ EKTweener.to(img, 1, {left: 120, ease: "easeInElastic"});
         
         
         
-        <script >
+        <script>
             /***** Source code *****/
             var img;
             var btn;
-            var i = 0;
-            var easing = ["easeOutBounce","easeInQuart","easeOutElastic"];
             function tweenIt(){
                 EKTweener.to(img, 1, {
                     left: Math.random() * 452,
-                    top: Math.random() *  252,
-                    onComplete: function(){
-                        alert(easing[i]);
-                        if(i++ ==2) i=0;
-                    },
-                    ease: easing[i]
+                    top: Math.random() * 252,
+                    yoyo: ["top"]
                 });
             }
             img = document.getElementById("img");

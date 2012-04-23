@@ -1,0 +1,63 @@
+<html>
+    <head>
+        <title>EKTweener.js - Transform3d</title>
+        <link rel="stylesheet" href="css/reset.css" type="text/css">
+        <link rel="stylesheet" href="css/ui.css" type="text/css">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script src="https://raw.github.com/edankwan/EKTweener.js/master/dist/EKTweener.all.js"></script>
+        <script src="js/ui.js"></script>
+        <!---
+            The script of example script of this page is at the bottom of the source.
+            --->
+    </head>
+    <body>
+        <div id="container">
+            <div class="wrapper">
+                <div class="title">Transform3d</div>
+                <div class="line"></div>
+                <div id="canvas" class="canvas perspective500">
+                    <div id="img" class="img"></div>
+                    <div id="btn" class="btn">CLICK HERE</div>
+                </div>
+                <div class="body">
+                    This is an example of using the transform3d plugin. If you are not using the EKTweener.all.js, please make sure you added the transform3d plugin(EKTweenerTransform3dPlugin.js) into your html.<br/><br/>
+                    <textarea rows=7 wrap=off readonly>
+EKTweener.to(img, 1, {
+    transform3d:
+        "translate3d("+Math.random()*452+"px,"+Math.random() * 252+"px,0)"+
+        "rotateX("+Math.random()*90+"deg)"+
+        "rotateY("+Math.random()*90+"deg)"
+});
+                    </textarea><br/><br/>
+                    <p>This plugin use getComputedStyle() to convert the style into Matrix2d/Matrix3d, which means you can freely use the standard transform functions including <span class="italic">matrix3d(), translate3d(), translateX/Y/Z(), scale3d(), scaleX/Y/Z(), rotate3d() and rotateX/Y/Z(), and combine them into a string value.</span></p>
+
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                </div>
+            </div>
+        </div>
+        <div id="menu"> </div>
+        
+        
+        
+        
+        <script>
+            /***** Source code *****/
+            var img;
+            var btn;
+            function tweenIt(){
+                EKTweener.to(img, 1, {
+                    transform3d:
+                        "translate3d("+Math.random()*452+"px,"+Math.random() * 252+"px,0)"+
+                        "rotateX("+Math.random()*90+"deg)"+
+                        "rotateY("+Math.random()*90+"deg)"
+                });
+            }
+            img = document.getElementById("img");
+            btn = document.getElementById("btn");
+            btn.onclick = tweenIt;
+        </script>
+    </body>
+</html>

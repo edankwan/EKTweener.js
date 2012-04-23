@@ -1,0 +1,72 @@
+<html>
+    <head>
+        <title>EKTweener.js - Color</title>
+        <link rel="stylesheet" href="css/reset.css" type="text/css">
+        <link rel="stylesheet" href="css/ui.css" type="text/css">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script src="https://raw.github.com/edankwan/EKTweener.js/master/dist/EKTweener.all.js"></script>
+        <script src="js/ui.js"></script>
+        <!---
+            The script of example script of this page is at the bottom of the source.
+            --->
+    </head>
+    <body>
+        <div id="container">
+            <div class="wrapper">
+                <div class="title">Color</div>
+                <div class="line"></div>
+                <div id="canvas" class="canvas">
+                    <div id="img" class="color-block"></div>
+                    <div id="btn" class="btn">CLICK HERE</div>
+                </div>
+                <div class="body">
+                    This is an example of using the color plugin. If you are not using the EKTweener.all.js, please make sure you added the color plugin(EKTweenerColorPlugin.js) into your html.<br/><br/>
+                    <textarea rows=5 wrap=off readonly>
+EKTweener.fromTo(img, 1, {
+    backgroundColor: "#000"
+}, {
+    left: Math.random() * 452,
+    top: Math.random() * 252,
+    backgroundColor: "#F00"
+});
+                    </textarea><br/><br/>
+                    <p>The color plugin support the color style using <span class="italic">#RGB</span>, <span class="italic">#RRGGBB</span> and <span class="italic">rgb(R,G,B)</span> formats. And the output will be in <span class="italic">#RRGGBB</span> format.</p>
+                    <p>When you added EKTweener.all.js or EKTweenerColorPlugin.js to your document, it will automatically make the properties "color" and "backgroundColor" to use this plugin if the target is a DOM element. I didn't add the automatication to other style like borderColor because it may contain more than one color property.</p>
+                    <p>If you want to manually apply the plugin to other property, you can use:</p>
+                    <textarea rows=5 wrap=off readonly>
+EKTweener.to(img, 1, {
+    borderColor: "#F00",
+    plugin: {borderColor: EKTweenerColorPlugin }
+});
+                    </textarea><br/><br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                </div>
+            </div>
+        </div>
+        <div id="menu"> </div>
+        
+        
+        
+        
+        <script>
+            /***** Source code *****/
+            var img;
+            var btn;
+            function tweenIt(){
+                EKTweener.fromTo(img, 1, {
+                    backgroundColor: "#000"
+                }, {
+                    left: Math.random() * 452,
+                    top: Math.random() * 252,
+                    backgroundColor: "#F00"
+                });
+            }
+            img = document.getElementById("img");
+            btn = document.getElementById("btn");
+            btn.onclick = tweenIt;
+        </script>
+    </body>
+</html>

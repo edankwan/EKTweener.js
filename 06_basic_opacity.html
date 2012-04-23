@@ -1,0 +1,60 @@
+<html>
+    <head>
+        <title>EKTweener.js - Opacity</title>
+        <link rel="stylesheet" href="css/reset.css" type="text/css">
+        <link rel="stylesheet" href="css/ui.css" type="text/css">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script src="https://raw.github.com/edankwan/EKTweener.js/master/dist/EKTweener.all.js"></script>
+        <script src="js/ui.js"></script>
+        <!---
+            The script of example script of this page is at the bottom of the source.
+            --->
+    </head>
+    <body>
+        <div id="container">
+            <div class="wrapper">
+                <div class="title">Opacity</div>
+                <div class="line"></div>
+                <div id="canvas" class="canvas">
+                    <div id="img" class="color-block"></div>
+                    <div id="btn" class="btn">CLICK HERE</div>
+                </div>
+                <div class="body">
+                    This is an example of using the opacity plugin. If you are not using the EKTweener.all.js, please make sure you added the opacity plugin(EKTweenerOpacityPlugin.js) into your html.<br/><br/>
+                    <textarea rows=5 wrap=off readonly>
+EKTweener.fromTo(img, 1, {
+    opacity: 1
+}, {
+    opacity: 0
+});
+                    </textarea><br/><br/>
+                    <p>It is a plugin to make sure the property opacity can work on older IE browser. It does nothing to the browser support opacity natively</p>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                </div>
+            </div>
+        </div>
+        <div id="menu"> </div>
+        
+        
+        
+        
+        <script>
+            /***** Source code *****/
+            var img;
+            var btn;
+            function tweenIt(){
+                EKTweener.fromTo(img, 1, {
+                    opacity: 1
+                }, {
+                    opacity: 0
+                });
+            }
+            img = document.getElementById("img");
+            btn = document.getElementById("btn");
+            btn.onclick = tweenIt;
+        </script>
+    </body>
+</html>
