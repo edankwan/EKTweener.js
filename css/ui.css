@@ -1,9 +1,9 @@
 html, body{
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Trebuchet MS', sans-serif
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-style: normal;
   background-color: #FFF;
   color: #252544;
-  
+  font-size: 13px;
   min-width: 880px;
   overflow: hidden;
 }
@@ -36,7 +36,7 @@ li {
     text-decoration: underline;
 }
 textarea, .code{
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Trebuchet MS', sans-serif
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-style: normal;
     position: relative;
     width: 570px;
@@ -71,7 +71,7 @@ textarea, .code{
     background-color: #FFF;
 }
 #menu h3 {
-    font-size: 18px;
+    font-size: 16px;
     margin-top: 16px;
     line-height: 15px;
     margin-bottom: 16px;
@@ -83,7 +83,6 @@ textarea, .code{
 #menu a {
     display: block;
     width: 100%;
-    font-size: 14px;
     margin-top: 8px;
     color: #000;
 }
@@ -100,8 +99,9 @@ textarea, .code{
 }
 #container .title{
     margin-top: 40px;
-    font-size: 24px;
+    font-size: 18px;
     color: #000;
+    font-style: italic;
 }
 #container .line{
     width: 580px;
