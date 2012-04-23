@@ -1,10 +1,11 @@
 <html>
     <head>
         <title>EKTweener.js</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <link rel="stylesheet" href="css/reset.css" type="text/css">
         <link rel="stylesheet" href="css/ui.css" type="text/css">
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-        <script src="https://raw.github.com/edankwan/EKTweener.js/master/dist/EKTweener.all.js"></script>
+        <script src="js/EKTweener.all.js"></script>
         <script src="js/ui.js"></script>
         <!---
             The script of example script of this page is at the bottom of the source.
@@ -34,24 +35,6 @@ EKTweener.to(img, 1, {width: 120, height: 120});
             </div>
         </div>
         <div id="menu"> </div>
-        
-        
-        
-        
-        <script>
-            /***** Source code *****/
-            var img;
-            var btn;
-            function tweenIt(){
-                EKTweener.to(img, 1, {
-                    left: Math.random() * 452,
-                    top: Math.random() * 252
-                });
-            }
-            img = document.getElementById("img");
-            btn = document.getElementById("btn");
-            btn.onclick = tweenIt;
-        </script>
         
     </body>
 </html>
