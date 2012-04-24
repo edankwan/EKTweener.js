@@ -1,0 +1,109 @@
+<html>
+    <head>
+        <title>EKTweener.js - to()</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <link rel="stylesheet" href="css/reset.css" type="text/css">
+        <link rel="stylesheet" href="css/ui.css" type="text/css">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script src="js/EKTweener.all.js"></script>
+        <script src="js/ui.js"></script>
+        <!---
+            The script of example script of this page is at the bottom of the source.
+            --->
+    </head>
+    <body>
+        <div id="container">
+            <div class="wrapper">
+                <div class="title">EKTweener.to()</div>
+                <div class="line"></div>
+                <div class="body">
+                    <div class="code">EKTweener.to(element, duration, {properties});</div><br/>
+                    <ol>
+                        <li><span class="italic">element</span> can be the dom element or just an object</li>
+                        <li><span class="italic">duration</span> is the duration of the transition in second</li>
+                        <li><span class="italic">properties</span> are the properties of the element you want to animate. There are some preserved properties names for special features in EKTweener.</li>
+                    </ol>
+                    <br/>
+                    <br/>
+                </div>
+                <div id="canvas" class="canvas">
+                    <div id="img" class="img"></div>
+                    <div id="btn" class="btn">CLICK HERE</div>
+                </div>
+                <div class="body">
+                    In this example we use: <br/>
+                    <textarea rows=5 wrap=off readonly>
+EKTweener.to(img, 1, {
+    left: Math.random() * 452,
+    top: Math.random() * 252
+});
+                    </textarea ><br/><br/>
+                    <p>The function above will move the DOM element <span class="italic">img</span> to a random position within (452x252).</p>
+                    <br/>
+                    <br/>
+                </div>
+                <div class="line"></div>
+                <h4>Using JQuery:</h4>
+                <div id="canvas-jquery" class="canvas">
+                    <div id="img-jquery" class="img"></div>
+                    <div id="btn-jquery" class="btn">CLICK HERE</div>
+                </div>
+                <div class="body">
+                    In this example we use jQuery selector instead of the DOM element: <br/>
+                    <textarea rows=6 wrap=off readonly>
+$img = $("#img-jquery");
+EKTweener.to($img[0], 1, {
+    left: Math.random() * 452,
+    top: Math.random() * 252
+});
+                    </textarea ><br/><br/>
+                    <p>This function does exactly the same thing we did in the previous function example but using jQuery instead. As you may know that jQuery selector is like an Array so you can simply use [0] to get the DOM element from the selector and do the animation. If you want to apply the animation to a selector which contains several items, you can simply use: </p>
+                    <textarea rows=6 wrap=off readonly>
+$imgs = $(".img");
+$imgs.each(function(i){
+    EKTweener.to($imgs[i], 1, {
+        left: Math.random() * 452,
+        top: Math.random() * 252
+    }
+});
+                    </textarea ><br/><br/>
+                    <br/>
+                    <br/>
+                </div>
+            </div>
+        </div>
+        <div id="menu"> </div>
+        
+        
+        
+        
+        <script>
+            /***** Source code *****/
+            var img;
+            var btn;
+            function tweenIt(){
+                EKTweener.to(img, 1, {
+                    left: Math.random() * 452,
+                    top: Math.random() * 252
+                });
+            }
+            img = document.getElementById("img");
+            btn = document.getElementById("btn");
+            btn.onclick = tweenIt;
+            
+            
+            
+            var $img;
+            var $btn;
+            function $tweenIt(){
+                EKTweener.to($img[0], 1, {
+                    left: Math.random() * 452,
+                    top: Math.random() * 252
+                });
+            }
+            $img = $("#img-jquery");
+            $btn = $("#btn-jquery");
+            $btn.click($tweenIt);
+        </script>
+    </body>
+</html>

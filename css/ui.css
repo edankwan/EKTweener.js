@@ -29,6 +29,9 @@ ol{
 li {
     list-style-type: square;
 }
+.bold{
+    font-weight: bold;
+}
 .italic{
     font-style: italic;
 }

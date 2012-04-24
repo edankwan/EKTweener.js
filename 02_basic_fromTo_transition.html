@@ -16,20 +16,30 @@
             <div class="wrapper">
                 <div class="title">EKTweener.fromTo()</div>
                 <div class="line"></div>
+                <div class="body">
+                    <div class="code">EKTweener.fromTo(<span class="italic bold">element</span>, <span class="italic bold">duration</span>, {<span class="italic bold">from properties</span>}, {<span class="italic bold">to properties</span>});</div><br/>
+                    <ol>
+                        <li><span class="italic bold">element</span> can be the dom element or just an object</li>
+                        <li><span class="italic bold">duration</span> is the duration of the transition in second</li>
+                        <li><span class="italic bold">from properties</span> are the properties of the element you want to tween <span class="bold">from</span></li>
+                        <li><span class="italic bold">to properties</span> are the properties of the element you want to tween <span class="bold">to</span> and the <span class="bold">special features.</span></li>
+                    </ol> 
+                    <br/>
+                    <br/>
+                </div>
                 <div id="canvas" class="canvas">
                     <div id="img" class="img"></div>
                     <div id="btn" class="btn">CLICK HERE</div>
                 </div>
                 <div class="body">
-                    This is an example of using the basic EKTweener.fromTo() transition.<br/><br/>
-                    <div class="code">EKTweener.fromTo(element, duration, {from properties}, {to properties});</div><br/>
-                    <ol>
-                        <li><span class="italic">element</span> can be the dom element or just an object</li>
-                        <li><span class="italic">duration</span> is the duration of the transition in second</li>
-                        <li><span class="italic">from properties</span> are the properties of the element you want to tween from</li>
-                        <li><span class="italic">to properties</span> are the properties of the element you want to tween to</li>
-                    </ol> 
-                    
+                    In this example we use: <br/>
+                    <textarea rows=5 wrap=off readonly>
+EKTweener.fromTo(img, 1, {left: 0, top: 0}, {
+    left: Math.random() * 452,
+    top: Math.random() * 252
+});
+                    </textarea ><br/><br/>
+                    <p>The function above will move the DOM element <span class="italic bold">img</span> to a random position within (452, 252) from (0, 0)</p>
                     <h4>Other examples:</h4>
                     <textarea rows=3 wrap=off readonly>
 EKTweener.fromTo(img, 1, {left: 10, top: 10}, {left: 100, top: 100});
