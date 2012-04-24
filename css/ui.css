@@ -188,3 +188,8 @@ textarea, .code{
 #container .img:hover{
     border: 5px solid #FFF;
 }
+
+#share-btns{
+    position: absolute;
+    bottom:20px;
+}
