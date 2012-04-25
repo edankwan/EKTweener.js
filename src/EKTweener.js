@@ -235,7 +235,7 @@ EKTweener = (function(doc, w) {
     
     function getStyle(name, cssText){
         propertyName = getPropertyName(name);
-        var styleName;
+        var styleName = styleName;
         var re = /[A-Z]/g;
         if (re.test(propertyName)) {
             styleName = propertyName.replace(re, function() {return "-" + arguments[0].toLowerCase()});
