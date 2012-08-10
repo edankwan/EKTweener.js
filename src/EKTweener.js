@@ -235,9 +235,9 @@ EKTweener = (function(doc, w) {
     
     function getStyle(name, cssText){
         propertyName = getPropertyName(name);
-        var styleName = styleName;
+        var styleName = propertyName;
         var re = /[A-Z]/g;
-        if (re.test(propertyName)) {
+        if (propertyName.search(re)>-1) {
             styleName = propertyName.replace(re, function() {return "-" + arguments[0].toLowerCase()});
             if(styleName.indexOf("ms") == 0) styleName = "-" + styleName;
         }
@@ -478,7 +478,7 @@ EKTween.prototype = {
                 property[1] = parseFloat(currentValue);
             }
         }else{
-            property[1] = this._appliedTarget[propertyName];
+            property[1] = parseFloat(this._appliedTarget[propertyName]);
         }
         if(isNaN(property[1])) property[1] = 0;
     },
@@ -560,7 +560,7 @@ EKTween.prototype = {
     
     getCurrentPropertyValue: function(propertyName){
         var re = /[A-Z]/g;
-        if (re.test(propertyName)) {
+        if (propertyName.search(re)>-1) {
             propertyName = propertyName.replace(re, function() {return "-" + arguments[0].toLowerCase()});
             if(propertyName.indexOf("ms") == 0) propertyName = "-" + propertyName;
         }
