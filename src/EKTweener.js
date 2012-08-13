@@ -1,6 +1,6 @@
 /**
 *
-* Version:  0.3.3
+* Version:  0.3.4
 * Author:   Edan Kwan
 * Contact:  info@edankwan.com
 * Website:  http://www.edankwan.com/
@@ -304,7 +304,7 @@ function EKTween(target, appliedTarget, duration, delay, data, hasFrom){
     
     
     this.isFinished = false;
-    this.ease = EKTweenFunc.easeOutCirc;
+    this.ease = EKTweenFunc.defaultFunc;
     this.tweens = null;
     this.onStart = null;
     this.onStartParams = null;
@@ -739,6 +739,7 @@ var EKTweenFunc = {
         return EKTweenFunc.easeInBounce((t*2)-d, b+c/2, c/2, d);
     }
 };
+EKTweenFunc.defaultFunc = EKTweenFunc.easeOutCirc;
 
 
 
