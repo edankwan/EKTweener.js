@@ -35,19 +35,30 @@
 /*
  * http://paulirish.com/2011/requestanimationframe-for-smart-animating/
  */
-
-if(!window.requestAnimFrame){
-    window.requestAnimFrame = (function(window){
-        return  window.requestAnimationFrame       || 
-                window.webkitRequestAnimationFrame || 
-                window.mozRequestAnimationFrame    || 
-                window.oRequestAnimationFrame      || 
-                window.msRequestAnimationFrame     || 
-                function(callback){
-                    window.setTimeout(callback, 1000 / 60);
-                };
-    })(window);
-}
+(function() {
+    var lastTime = 0;
+    var vendors = ['ms', 'moz', 'webkit', 'o'];
+    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+        window.cancelAnimationFrame = 
+          window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+    }
+ 
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function(callback, element) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function() { callback(currTime + timeToCall); }, 
+              timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+ 
+    if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
+}());
 
 /*
  * getComputedStyle for IE:
@@ -399,7 +410,7 @@ EKTween.prototype = {
     
     onLoop: function () {
         if(this.isFinished)return;
-        requestAnimFrame(this.onLoop);
+        requestAnimationFrame (this.onLoop);
         this._currentTime = new Date().getTime();
         if (!this._isPaused) {
             if (this._currentTime >= this._startTime) {
@@ -505,6 +516,7 @@ EKTween.prototype = {
     },
 
     kill: function(){
+        cancelAnimationFrame (this.onLoop);
         this.isFinished = true;
     },
     
