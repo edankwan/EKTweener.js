@@ -310,7 +310,7 @@ function EKTween(target, appliedTarget, duration, delay, data, hasFrom){
     this._isStarted = false;
     this._currentTime = new Date().getTime();
     this._startTime = delay * 1000 + this._currentTime;
-    this._durationTime = duration * 1000;
+    this._durationTime = (duration || 0) * 1000;
     this._hasFrom = hasFrom;
     
     
