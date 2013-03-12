@@ -1,6 +1,6 @@
 /**
 *
-* Version:  0.3.4
+* Version:  0.3.5
 * Author:   Edan Kwan
 * Contact:  info@edankwan.com
 * Website:  http://www.edankwan.com/
@@ -177,6 +177,13 @@ EKTweener = (function(doc, w) {
     }
     
     function to(target, duration, data, hasFrom) {
+
+        if(target.jquery) {
+            var tweens = [];
+            target.each(function(){tweens[tweens.length] = to(this, duration, data, hasFrom);});
+            return tweens.length > 1 ? tweens : tweens[0];
+        }
+
         var appliedTarget;
         if(_isHTMLElement(target)&&data.skipHTMLParsing!=true){
             appliedTarget = target.style;
@@ -205,6 +212,13 @@ EKTweener = (function(doc, w) {
     };
 
     function fromTo(target, duration, fromData, toData) {
+
+        if(target.jquery) {
+            var tweens = [];
+            target.each(function(){tweens[tweens.length] = fromTo(this, duration, fromData, toData);});
+            return tweens.length > 1 ? tweens : tweens[0];
+        }
+
         // create a EKTween and change the from values afterwards
         var ekTween = to(target, duration, toData, true);
         if(_isHTMLElement(target)&&toData.skipHTMLParsing!=true)_parseDataNaming(fromData);
@@ -215,6 +229,12 @@ EKTweener = (function(doc, w) {
 
 
     function killTweensOf(target) {
+
+        if(target.jquery) {
+            target.each(function(){ killTweensOf(this);});
+            return;
+        }
+
         // kill all the tweens of the target
         var tween = _targetTweens[target.tweenId];
         if (tween) {
@@ -413,51 +433,55 @@ EKTween.prototype = {
         requestAnimationFrame (this.onLoop);
         this._currentTime = new Date().getTime();
         if (!this._isPaused) {
-            if (this._currentTime >= this._startTime) {
-                
-                if (!this._isStarted) {
-                    if(!this._hasFrom) for(var i in this.properties){
-                        this.setProperty(i, this.properties[i]);
-                    }
-                    
-                    if (this.onStart) {
-                        if (this.onStartParams) {
-                            this.onStart.apply(this, this.onStartParams);
-                        } else {
-                            this.onStart();
-                        }
-                    }
-                    this._isStarted = true;
-                }
-                
-                if (this._currentTime >= this._durationTime + this._startTime) {
-                    for(var i in this.properties){
-                        this.setValue(this.properties[i][4]?this.properties[i][1]:this.properties[i][0], i, this.properties[i]);
-                    }
-                    this.update();
-                    if (this.onComplete) {
-                        if (this.onCompleteParams) {
-                            this.onComplete.apply(this, this.onCompleteParams);
-                        } else {
-                            this.onComplete();
-                        }
-                    }
-                    this.kill();
-                    i = this.tweens.length;
-                    while(i--){
-                        if(this.tweens[i])if(this.tweens[i].isFinished) this.tweens.splice(i, 1);
-                    }
-                    return;
-                }else{
-                    for(var i in this.properties){
-                        this.setEaseValue(i, this.properties[i]);
-                    }
-                    this.update();
-                }
-                
-            };
+            this.render();
         };
         
+    },
+
+    render: function(){
+        if (this._currentTime >= this._startTime) {
+            
+            if (!this._isStarted) {
+                if(!this._hasFrom) for(var i in this.properties){
+                    this.setProperty(i, this.properties[i]);
+                }
+                
+                if (this.onStart) {
+                    if (this.onStartParams) {
+                        this.onStart.apply(this, this.onStartParams);
+                    } else {
+                        this.onStart();
+                    }
+                }
+                this._isStarted = true;
+            }
+            
+            if (this._currentTime >= this._durationTime + this._startTime) {
+                for(var i in this.properties){
+                    this.setValue(this.properties[i][4]?this.properties[i][1]:this.properties[i][0], i, this.properties[i]);
+                }
+                this.update();
+                if (this.onComplete) {
+                    if (this.onCompleteParams) {
+                        this.onComplete.apply(this, this.onCompleteParams);
+                    } else {
+                        this.onComplete();
+                    }
+                }
+                this.kill();
+                i = this.tweens.length;
+                while(i--){
+                    if(this.tweens[i])if(this.tweens[i].isFinished) this.tweens.splice(i, 1);
+                }
+                return;
+            }else{
+                for(var i in this.properties){
+                    this.setEaseValue(i, this.properties[i]);
+                }
+                this.update();
+            }
+            
+        };
     },
     
     setProperty: function (propertyName, property) {
